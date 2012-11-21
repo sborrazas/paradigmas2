@@ -4,9 +4,13 @@
 :-use_module(geographic).
 
 %adyacentes/2
+adyacentes(A, B).
 
 %caminoHC/5
+caminoHC(A, B, C, D, E).
 
 %caminoHC/5
+caminoHC(A, B, C, D, E).
 
 %caminoAAst/5
+caminoAAst(A, B, C, D, E).
