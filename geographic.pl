@@ -17,11 +17,21 @@ distance((X1, Y1), (X2, Y2), D) :- DistX = (X1 - X2) ** 2, DistY = (Y1 - Y2) ** 
 % Considerar un error del 5 ∗ 10−14 debido al redondeo).
 inside(P1, P2, P3) :- distance(P1, P2, D1), distance(P1, P3, D2), distance(P2, P3, D3), Diff = D2 + D3 - D1, Diff < (5 * (10 ** -14)).
 
-%near/2
-near(A, B).
 
-%cross/5
-cross(A, B, C, D, E).
 
-%corner/3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% near(+A,+B)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Se cumple si las coordenadas X e Y se consideran "cercanas", esto es, si están a una distancia
+% menor o igual a 5*10-14
+near(A, B) :- distance(A, B, Dist), Dist =< (5 * (10 ** -14)).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% cross (+X1, +X2, +Y1, +Y2, ?Z)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+cross(A, B, C, D, E) :- inside(A, B, E), inside(C, D, E).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% corner (+C1 ,+C2 ,?X)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 corner(A, B, C).
