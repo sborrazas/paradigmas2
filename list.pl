@@ -1,7 +1,7 @@
 :- module(list, [drop/3,sublist/4,sublist/5]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% drop(+N,+Xs,?Ys)
+% drop(+N, +Xs, ?Ys)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Este predicado se satisface si Ys es la lista resultante de seguir el siguiente procedimiento:
 % dejar un elemento de la lista Xs y luego saltear los N proximos elementos y volver a repetir
@@ -10,7 +10,7 @@
 % Este predicado es usado en la interfaz grafica para reducir el detalle de recorridos muy
 % largos debido a que Google Maps Image tiene limites en el largo de las URLs.
 
-drop(N, Xs, Ys) :-  drop(N, Xs, Ys, N).
+drop(N, Xs, Ys) :- drop(N, Xs, Ys, N).
 
 drop(_, [], [], _).
 drop(N, [X|Xs], [X|Ys], N) :- drop(N, Xs, Ys, 0).
