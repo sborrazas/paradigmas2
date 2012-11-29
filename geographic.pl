@@ -8,21 +8,24 @@
 % Este predicado calcula la distancia cartesiana D entre las coordenadas X e Y.
 % Estas coordenadas son pares ordenados de reales correspondientes a la latitud y longitud.
 
-distance((X1, Y1), (X2, Y2), D) :- DistX = (X1 - X2) ** 2, DistY = (Y1 - Y2) ** 2, D is sqrt(DistY + DistX).
+distance((X1, Y1), (X2, Y2), D) :- DistX is ((X1 - X2) ** 2), DistY is ((Y1 - Y2) ** 2), D is sqrt(DistY + DistX).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % inside(+X, +Y, +Z)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Se cumple si la coordenada Z esta dentro del segmento definido por las coordenadas X e Y
 % Considerar un error del 5 ∗ 10−14 debido al redondeo).
-inside(P1, P2, P3) :- distance(P1, P2, D1), distance(P1, P3, D2), distance(P2, P3, D3), Diff = D2 + D3 - D1, Diff < (5 * (10 ** -14)).
+inside(P1, P2, P3) :- distance(P1, P2, D1),
+                      distance(P1, P3, D2),
+                      distance(P2, P3, D3),
+                      Diff = D2 + D3 - D1, Diff =< (5 * (10 ** (-15))).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % near(+A, +B)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Se cumple si las coordenadas X e Y se consideran cercanas, esto es, si estan a una distancia
 % menor o igual a 5*10-14
-near(P1, P2) :- distance(P1, P2, Dist), Dist =< (5 * (10 ** -14)).
+near(P1, P2) :- distance(P1, P2, Dist), Dist =< (5 * (10 ** (-15))).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % cross (+X1, +X2, +Y1, +Y2, ?Z)
@@ -52,8 +55,19 @@ pendiente((X1, Y1), (X2, Y2), M) :- M is (Y2 - Y1) / (X2 - X1).
 % Esta condicion se cumple si se satisface alguna de las siguientes condiciones:
 % - Existen dos tramos, correspondientes a las calles C1 y C2 respectivamente, que se intersectan en X
 % - Existen dos extremos de tramos cercanos, correspondientes a las calles C1 y C2 respectivamente
-corner(C1, C2, X) :- tramo(C1, P1, P2), tramo(C2, P3, P4), cross(P1, P2, P3, P4, X), !.
-corner(C1, C2, X) :- tramo(C1, P1, _), tramo(C2, P3, _), near(P1, X), near(P3, X), !.
-corner(C1, C2, X) :- tramo(C1, P1, _), tramo(C2, _, P4), near(P1, X), near(P4, X), !.
-corner(C1, C2, X) :- tramo(C1, _, P2), tramo(C2, P3, _), near(P2, X), near(P3, X), !.
-corner(C1, C2, X) :- tramo(C1, _, P2), tramo(C2, _, P4), near(P2, X), near(P4, X), !.
+corner(C1, C2, X) :- tramo(C1, P1, P2), tramo(C2, P3, P4), cross(P1, P2, P3, P4, X), near(X, P1), !.
+corner(C1, C2, X) :- tramo(C1, P1, P2), tramo(C2, P3, P4), cross(P1, P2, P3, P4, X), near(X, P2), !.
+corner(C1, C2, X) :- tramo(C1, P1, P2), tramo(C2, P3, P4), cross(P1, P2, P3, P4, X), near(X, P3), !.
+corner(C1, C2, X) :- tramo(C1, P1, P2), tramo(C2, P3, P4), cross(P1, P2, P3, P4, X), near(X, P4), !.
+% C1 y C2 se cortan cercanos a P2 y P4
+corner(C1, C2, Esq) :- tramo(C1, P1, P2), tramo(C2, P3, P4), near(P2, P4), Esq = P2.
+corner(C1, C2, Esq) :- tramo(C1, P1, P2), tramo(C2, P3, P4), near(P2, P4), Esq = P4.
+% C1 y C2 se cortan cercanos a P1 y P3
+corner(C1, C2, Esq) :- tramo(C1, P1, P2), tramo(C2, P3, P4), near(P1, P3), Esq = P1.
+corner(C1, C2, Esq) :- tramo(C1, P1, P2), tramo(C2, P3, P4), near(P1, P3), Esq = P3.
+% C1 y C2 se cortan cercanos a P1 y P4
+corner(C1, C2, Esq) :- tramo(C1, P1, P2), tramo(C2, P3, P4), near(P1, P4), Esq = P1.
+corner(C1, C2, Esq) :- tramo(C1, P1, P2), tramo(C2, P3, P4), near(P1, P4), Esq = P4.
+% C1 y C2 se cortan cercanos a P2 y P3
+corner(C1, C2, Esq) :- tramo(C1, P1, P2), tramo(C2, P3, P4), near(P2, P3), Esq = P2.
+corner(C1, C2, Esq) :- tramo(C1, P1, P2), tramo(C2, P3, P4), near(P2, P3), Esq = P3.
