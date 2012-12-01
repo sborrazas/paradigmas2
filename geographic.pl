@@ -60,14 +60,14 @@ corner(C1, C2, X) :- tramo(C1, P1, P2), tramo(C2, P3, P4), cross(P1, P2, P3, P4,
 corner(C1, C2, X) :- tramo(C1, P1, P2), tramo(C2, P3, P4), cross(P1, P2, P3, P4, X), near(X, P3), !.
 corner(C1, C2, X) :- tramo(C1, P1, P2), tramo(C2, P3, P4), cross(P1, P2, P3, P4, X), near(X, P4), !.
 % C1 y C2 se cortan cercanos a P2 y P4
-corner(C1, C2, Esq) :- tramo(C1, P1, P2), tramo(C2, P3, P4), near(P2, P4), Esq = P2.
-corner(C1, C2, Esq) :- tramo(C1, P1, P2), tramo(C2, P3, P4), near(P2, P4), Esq = P4.
+corner(C1, C2, Esq) :- tramo(C1, _, P2), tramo(C2, _, P4), near(P2, P4), Esq = P2.
+corner(C1, C2, Esq) :- tramo(C1, _, P2), tramo(C2, _, P4), near(P2, P4), Esq = P4.
 % C1 y C2 se cortan cercanos a P1 y P3
-corner(C1, C2, Esq) :- tramo(C1, P1, P2), tramo(C2, P3, P4), near(P1, P3), Esq = P1.
-corner(C1, C2, Esq) :- tramo(C1, P1, P2), tramo(C2, P3, P4), near(P1, P3), Esq = P3.
+corner(C1, C2, Esq) :- tramo(C1, P1, _), tramo(C2, P3, _), near(P1, P3), Esq = P1.
+corner(C1, C2, Esq) :- tramo(C1, P1, _), tramo(C2, P3, _), near(P1, P3), Esq = P3.
 % C1 y C2 se cortan cercanos a P1 y P4
-corner(C1, C2, Esq) :- tramo(C1, P1, P2), tramo(C2, P3, P4), near(P1, P4), Esq = P1.
-corner(C1, C2, Esq) :- tramo(C1, P1, P2), tramo(C2, P3, P4), near(P1, P4), Esq = P4.
+corner(C1, C2, Esq) :- tramo(C1, P1, _), tramo(C2, _, P4), near(P1, P4), Esq = P1.
+corner(C1, C2, Esq) :- tramo(C1, P1, _), tramo(C2, _, P4), near(P1, P4), Esq = P4.
 % C1 y C2 se cortan cercanos a P2 y P3
-corner(C1, C2, Esq) :- tramo(C1, P1, P2), tramo(C2, P3, P4), near(P2, P3), Esq = P2.
-corner(C1, C2, Esq) :- tramo(C1, P1, P2), tramo(C2, P3, P4), near(P2, P3), Esq = P3.
+corner(C1, C2, Esq) :- tramo(C1, _, P2), tramo(C2, P3, _), near(P2, P3), Esq = P2.
+corner(C1, C2, Esq) :- tramo(C1, _, P2), tramo(C2, P3, _), near(P2, P3), Esq = P3.
