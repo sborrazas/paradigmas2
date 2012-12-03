@@ -15,7 +15,41 @@
 % recorrido pero de la coordenada mas cercana a D. Dado que se desea ir desde O hasta D se tiene
 % que cumplir que la coordenada mas cercana al origen O tiene que ocurrir antes en la lista
 % que conforma el recorrido que la coordenada mas cercana al destino D (o sea, se debe cumplir PO < PD).
-findBusCoor(A, B, C, D, E, F, G).
+findBusCoor(O, D, N, V, Desc, PO, ParadaDestino) :-
+  findall(Retorno, calcularRecorridos(O, D, Retorno), Retornos),
+  sort(Retornos, [Solucion|_]),
+  (_, N, V, Desc, PO, PD) = Solucion,
+  ParadaDestino is PO + PD + 1.
+
+calcularRecorridos(O, D, Retorno) :-
+  recorrido(N, Desc, V, Paradas),
+  paradaMasCercana(O, Paradas, PO),
+  nth0(PO, Paradas, ParadaOrigen),
+  restoLista(PO, Paradas, RParadas),
+  paradaMasCercana(D, RParadas, PD),
+  nth0(PD, RParadas, ParadaDestino),
+  distance(O, ParadaOrigen, DistOrigen),
+  distance(D, ParadaDestino, DistDestino),
+  SumaDistancias is DistOrigen + DistDestino,
+  Retorno = (SumaDistancias, N, V, Desc, PO, PD).
+
+paradaMasCercana(_, [_], 0).
+paradaMasCercana(Punto, [Parada|RParadas], Indice) :-
+  distance(Punto, Parada, Dist),
+  paradaMasCercana(Punto, RParadas, ProximoIndice),
+  nth0(ProximoIndice, RParadas, ProximaMasCercana),
+  distance(Punto, ProximaMasCercana, ProximaDistMasCercana),
+  ProximoIndiceListaActual is ProximoIndice + 1,
+  maxIndice(Dist, 0, ProximaDistMasCercana, ProximoIndiceListaActual, Indice).
+
+maxIndice(Distancia1, Indice1, Distancia2, _, Indice1) :- Distancia1 < Distancia2.
+maxIndice(Distancia1, _, Distancia2, Indice2, Indice2) :- Distancia1 >= Distancia2.
+
+restoLista(0, [_|Resto], Resto).
+restoLista(Indice, [_|Resto], NuevoResto) :-
+  Indice > 0,
+  NuevoIndice is Indice - 1,
+  restoLista(NuevoIndice, Resto, NuevoResto).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % findBusCalles(+C1, +C2, +C3, +C4, ?N, ?V, ?Desc, ?PO, ?PD)
